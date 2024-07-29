@@ -19,6 +19,23 @@ app.get('/', (req, res) => res.send('Hello, world!'));
 app.post('/messages', (req, res) =>
     res.send(' This is where you can eventually see all messages.')
 );
+// Route parameter path:
+app.get('/:username/messages', (req, res) => {
+    // log the request parameter to console
+    console.log(`Hello ${req.params}!`);
+    // end the response.
+    res.end();
+});
+
+// Route multiple parameters path:
+app.get('/:username/messages/:messageId', (req, res) => {
+    // Get specific parameters from the params object.
+    console.log(
+        `Hello ${req.params.username}, you wrote ${req.params.messageId}!`
+    );
+    // End response.
+    res.end();
+});
 
 // Set up the server to listen to a specified port, in this case PORT = 3000
 const PORT = 3000;

@@ -174,3 +174,98 @@ now, sending any post request to the localhost:3000/messages path, will tell Exp
 **If at any point you would want a route that matches against any HTTP verb, you can use app.all() to match against all verbs**
 
 **Beside GET and POST verbs, there are various other HTTP verbs, like PUT and DELETE, commonly used in REST APIs, this will be covered later**
+
+# Part 2.2 - Paths
+
+The first argument passed through any route is the path to match.
+A path can be either a string, or a regular expression.
+
+Paths are a powerful way to identify needs of a request, depending on the way the path is defined.
+
+`/messages` matches against messages exactly.
+`/messages/all` matches only if the path is specifically '/messages/all'
+not '/messages' nor '/messages/new'
+
+Besides this, with string paths, we can also use certain symbols like ?, +, \*, or () to facilitate some pattern-matching functionalities, similar to regular expressions.
+
+`/messages?` makes the character optional, in this case the last 's'
+this path matches both /message and /messages
+
+`/(messages)?` '()' groups characters together, allowing symbols to act on the group.
+This path matches both / and /messages
+
+`/foo*/bar*bar` \* is a wildcard, matching any number of characters.
+This path matches /foo/barbar and even /foo-FOO/bar3dasdhioujah
+
+**Remember - Order matters, The routes will be set up in the server by the order they are defined.**
+
+For example, if we were to try to reach /messages here:
+
+```js
+// Does our request path match here? It DOES, since wildcard accepts any path!
+app.get('*', (req, res) => {
+    res.send(
+        '* is a great way to catch all otherwise unmatched paths, e.g. for custom 404 error handling.'
+    );
+});
+
+// This path is never reached, as the request was handled by the above path!
+app.get('/messages', (req, res) => {
+    res.send(
+        "This route will not be reached because the previous route's path matches first."
+    );
+});
+```
+
+we would instead reach \* first, as our request path would also match a wildcard.
+Therefore, make sure to keep the order of paths in mind, and define depending on specificity of the paths.
+
+```javascript
+// localhost:3000/messages will reach this path, as it matches the path defined.
+app.get('/messages', (req, res) => {
+    res.send(
+        "This route will not be reached because the previous route's path matches first."
+    );
+});
+
+// localhost:3000/gnmdsaoigmnadko or anyhting NOT localhost:3000/messages will reach this wildcard now.
+app.get('*', (req, res) => {
+    res.send(
+        '* is a great way to catch all otherwise unmatched paths, e.g. for custom 404 error handling.'
+    );
+});
+```
+
+# Part 2.3 - Route parameters
+
+Route parameters allows us to contain and use parameters passed through the URL paths in our request handling middleware.
+
+For instance, in order to get all messages specifically posted by Monkey, we can denote a route parameter by starting the segment of the url with a : followed by whatever we want to name the parameter.
+
+E.g
+
+```javascript
+app.get('/:username/messages', (req, res) => {
+    // log the request parameter to console
+    console.log(`Hello ${req.params}!`);
+    // end the response.
+    res.end();
+});
+```
+
+You can also get specific parameters from the req.params object
+
+```javascript
+app.get('/:username/messages/:messageId', (req, res) => {
+    // Get specific parameters from the params object.
+    console.log(
+        `Hello ${req.params.username}, you wrote ${req.params.messageId}!`
+    );
+    // End response.
+    res.end();
+});
+```
+
+By providing both a :username and :messageId on our path, we will be able to extract very specific data
+
+Take a moment to just imagine the potential uses of extracting and using these parameters from a request, cool right?
