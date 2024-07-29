@@ -2,7 +2,9 @@
 
 Starting in a new folder, initiate the node enviroment and generate a package.json using
 
-## Enviroment setup
+# Part 1. The app
+
+## Environment setup
 
 ```Bash
 npm init -y
@@ -140,3 +142,35 @@ Running this script, will tell node to watch for changes, as well as any changes
 
 Alternatively, nodemon, a highly customizable package can be added to the project and configured.
 But this is a more advanced approach.
+
+# Part 2. Routes
+
+Setting up our first app.get was a great start. In any real app however, we would want to be able to handle many different types of requests, for various different tasks.
+
+Enter, the routes.
+
+Routes are a way to match a requests HTTP verb, like GET or POST, as well as the URL path, against the apps set of middleware functions - the controllers.
+
+To use routes, we use expresses verb methods; `.get` and `.post`, and tie the request and response objects to the appropriate actions.
+
+For example, lets take our previous route:
+
+```javascript
+app.get('/', (req, res) => res.send('Hello, world!'));
+```
+
+`app.get("/"...` tells the app that if it receives a GET request from a user to the / path, it should pass the request through the following set of functions.
+
+Similarily, lets make a new path:
+
+```javascript
+app.post('/messages', (req, res) =>
+    res.send('This is were you can eventually see any messages')
+);
+```
+
+now, sending any post request to the localhost:3000/messages path, will tell Express to pass it through `app.post("/messages"...`s following set of functions, in this case, `res.send` again.
+
+**If at any point you would want a route that matches against any HTTP verb, you can use app.all() to match against all verbs**
+
+**Beside GET and POST verbs, there are various other HTTP verbs, like PUT and DELETE, commonly used in REST APIs, this will be covered later**
