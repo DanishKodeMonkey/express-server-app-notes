@@ -309,3 +309,63 @@ Specific query 'sort': likes
 ```
 
 Amazing!
+
+# Part 3 Routers
+
+As a project increases in size and scope, alot of different paths and routes will start cropping up to handle various different tasks, in these cases, organising our routes into groups for each specific task will help alleviate bloat, and promote readability. Doing this from start will make projects more easily scalable as well.
+
+Seperating various routes into their own router files will solve this.
+
+Starting by creating a new folder to hold these files, routes/ inside, we will then create a file for each type of page or data that we would want to be able to access.
+
+In our case, lets create a router file for users, messages, and the index.
+
+![routers folder](./public/Screenshot_20240730_143428.png)
+
+Now, lets migrate our various paths to the respective routers. Take messagesRouter.jsx for instance:
+
+```javascript
+const { Router } = require('express');
+
+const usersRouter = Router();
+
+usersRouter.get('/', (req, res) => res.send(`All users`));
+
+usersRouter.get('/:username', (req, res) => {
+    const { userId } = req.params;
+    res.send(`User ID: ${userId}`);
+});
+
+module.exports = usersRouter;
+```
+
+-- see `routes/usersRouter.jsx` for full breakdown.
+
+To use these files in our app, we just import them like any other module, then link them to a specific path using `app.use`
+
+```javascript
+// import routers
+const messagesRouter = require('./routes/messagesRouter');
+const usersRouter = require('./routes/usersRouter');
+const indexRouter = require('./routes/indexRouter');
+
+// assign paths to routers
+app.use('/messages', messagesRouter);
+app.use('/users', usersRouter);
+app.use('/', indexRouter);
+```
+
+Now we can avoid bloating app.js with a million different routes! SO much more readable!
+
+in app.js, we have now specified that any path starting with `/messages` will be passed through the messagesRouter for matching.
+Likewise for `/users`
+Any other routes will pass through the index router `/`
+
+**Remember: Organize by specificity**
+
+    Note:
+
+    Routers extend the assigned parent path.
+    So all routes in our routers implicitly start with their specified parent path.
+
+    E.g `messages/:messageId` to get a specific message id
