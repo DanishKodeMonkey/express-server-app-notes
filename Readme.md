@@ -370,6 +370,125 @@ Any other routes will pass through the index router `/`
 
     E.g `messages/:messageId` to get a specific message id
 
+# Part 4 - controllers
+
+Controllers act as the ultimate middleman, it handles passing requests to the correct model functions, but focuses on delegating specific requests to their respective tasks, rather than doing them itself.
+
+As the name suggests, the controller acts as the brain of its given area of responsibility, making sure that each component performs its tasks in delivering a response to a given request.
+
+In short, it makes sure a request to its given path is passed along to the correct middleware, and responded to.
+
+There are various methods at our disposal to do this, we have already used one of them!
+
+-   `res.send` is a general-purpose method for sending a response, compared to other more specific response methods it is more flexible, in that it can automatically set the content-type header based on the data passed to it. E.g Pass a object, and it will be stringified as a JSON and the content-type header will be set to application/json
+
+-   `res.json` is a specific handler for requests that are expected to involve JSON. Content-types will always be set to applicaiton/json and data sent as JSON
+
+-   `res.redirect` as the name suggests, redirects the client to a different URL.
+
+-   `res.render` uses a template engine to render a view template, and send the rendered HTML as a response.
+
+-   `res.status` is a useful method that can be used to manually set the HTTP Status code of a response. **This does not end the request-response cycle by itself however**, and should be chained to any of the other response methods.
+
+### Keep in mind that a response method does not end a function execution, and should usually be used at the end of a given function.
+
+For example:
+
+```javascript
+app.use((req.res) =>{
+    // resolve with response and end request-response cycle
+    res.send("End response")
+
+    // Function still runs as there is more to do however
+    console.log("Still running")
+
+    // An error will be thrown as you cannot send more than one response in a function!
+    res.send("Error will be thrown")
+})
+```
+
+# Part 4.2 - Middleware
+
+As teased earlier, middleware functions form the core concept of express, and is the power house behind its use-cases for handling requests and responses.
+
+Any function that is run from the moment a request is passed through a route path, and a response is returned, is a middleware function.
+
+Middleware functions typically take three arguments
+
+-   `req` Is the request object, holding the incoming HTTP request
+
+-   `res` is a response object, holding the HTTP response that will be returned to the client
+
+-   `next` is a special function that pass control of the request to the next middleware function in the chain. This function is optional.
+
+**The names are just convention, and can be named anything you want.**
+
+The purposes and use cases of a middleware function can be vast. Some of which can include
+
+-   Modifying a request or response object
+
+-   Executing additional code, like validation, or authentication etc.
+
+-   Ending the request-response cycle. Like with res.send. This can be done anywhere in the middleware chain, and will prevent the request from being passed further down the line. This can be useful for instance, if a error occurs and the cycle should just return the error.
+
+This and alot more is possible with middleware functions!
+
+    Express is a rich ecosystem of various packages created by other talented programmers, if you run into a issue or use-case there may very well already be a package for you to use for middleware. Like handling authentication, cors, rate limiting, session handlers, logging, etc.
+
+    **Keep in mind that not every little task may need a new package, importing alot of packages takes performance as well, and keep a healthy critical mind as to which packages you trust ot handle your requests and responses.**
+
+# Part 4.3 - Middleware levels
+
+Middleware is typically divided into application level middleware, and router level middleware depending on their roles in the application.
+
+## 4.3.1 - Application level middleware
+
+Application level middleware are bound to a instance of express using `app.use` or other express methods like `app.get` and `app.post`
+
+These functions are executing in every incoming request matching the specified path.
+
+If no path is specified, it is defaulted to `/` matching any incoming request.
+
+These middleware functions are typically placed on the top level of the application code to ensure they always run first.
+
+Common built-in middleware functions included with Express that are used for this include:
+
+-   Body parsers(`express.json`, `express.urlended`) allowing correct parsing of incoming request bodies. So that they can be used through `req.body`
+
+-   Serving static files like `app.use(express.static('public'))` which will serve static files such as HTML, CSS and javascript as well as images and more.
+
+-   Setting up views for view engines
+
+## 4.3.2 - Router level middleware
+
+Router level middleware works similarily to applicaiton level middleware, but is bound to an instance of an Express ROUTER rather than the app itself, using methods like `router.use` and `router.get` functions.
+
+These middleware functions trigger only when the requestm atches the specific route.
+
+# Part 4.4 - Making middleware
+
+Making middleware is done like any other function, the only difference being specifically handling the req, res, and next objects/methods inside.
+
+An example basic middleware function chains could be:
+
+```javascript
+function myFirstMiddleware(req, res, next) {
+    // Lets just log something to console
+    console.log('My first middleware executed!');
+
+    // modify the request object here
+    req.customProperty = 'Some new property';
+
+    // and pass control to the next middleware
+    next();
+}
+
+// register the middleware functions through app.use making it application-level middleware.
+app.use(myFirstMiddleware);
+```
+
+    NOTE: Keep in mind that middleware functions are executed in the order they are defined, and registered in the application
+
 # Do you want to know more?
 
 If interested, have a look at [the express docs](https://expressjs.com/en/4x/api.html)
@@ -377,3 +496,11 @@ If interested, have a look at [the express docs](https://expressjs.com/en/4x/api
 or more specifically the [routing section](https://expressjs.com/en/guide/routing.html)
 
 If interested, have a look at [the odin project](https://www.theodinproject.com/lessons/nodejs-routes) that covers this in great detail!
+
+```
+
+```
+
+```
+
+```
