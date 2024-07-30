@@ -487,7 +487,26 @@ function myFirstMiddleware(req, res, next) {
 app.use(myFirstMiddleware);
 ```
 
-    NOTE: Keep in mind that middleware functions are executed in the order they are defined, and registered in the application
+    NOTE: Keep in mind that middleware functions are executed in the order they are defined, and registered in the application.
+
+    Therefore any middleware that make changes to the request object should usually be placed at the very top of the application in order for us to see their changes in all middleware functions below it.
+
+# Part 4.5 - The journey of a request... extended.
+
+Controllers are just midddleware functions in the end, and are used by the route handlers.
+
+The controller comes in to play whenever a request is received and a route is matched with the request objects HTTP verb and path.
+
+The route determines the controller that should handle the request, based on the middleware chain.
+
+The controller then takes over and performs its assigned actions by delegating the request to its appropriate middleware, in order to fulfill the request.
+
+Once done, the controller passes the processed data to the view, rendering the data in a suitable format to return to the client. Like HTML, or JSON.
+
+    Typical naming convention are usually based on the route they are attatched to.
+    A GET route should trigger a getSomething middleware,
+    A POST route should trigger a createSomething middleware,
+    ETC. This convention is typically based on the person however.
 
 # Do you want to know more?
 
