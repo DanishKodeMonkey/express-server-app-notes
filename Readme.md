@@ -269,3 +269,43 @@ app.get('/:username/messages/:messageId', (req, res) => {
 By providing both a :username and :messageId on our path, we will be able to extract very specific data
 
 Take a moment to just imagine the potential uses of extracting and using these parameters from a request, cool right?
+
+# Part 2.4 - Query parameters
+
+"How do you ask the server a question?" would probably be a pretty easy question to come by if you came by a task like establishing any kind of search function, or maybe creating an API endpoint that accepts optional search parameters. For example: "Return weather data from a specific city" could be handled using a query parameter.
+
+Query parameters appear at the end of a URL, a `?` denotes the start of a query parameter, each consisting of a key-value pair `key=value` and seperated by anmpersand `&`. These symbols are special, as they are more like arguments passed to a given path, than part of the path itself.
+
+For example
+`/monkey/messages?sort=date&direction=ascending` will match still match the route with the `/:username/messages` path, but thanks to the query parameters `sort=date` and `direction=ascending` we can access more specific data to return inside the middleware chain.
+
+Express handles parsing any query parameters in a request, and will populate a special `req.query `object with all the key-value pairs it finds. Any repeated keys will be stored in an array.
+
+Accessing these query parameters is done much in a similar way as with the `req.params` object.
+
+So, editing our `/:username/messages` path to also handle any query parameters as follows:
+
+```javascript
+// Route parameter path:
+app.get('/:username/messages', (req, res) => {
+    console.log(`Hello ${req.params.username}!`);
+    console.log(`All queries:`, req.query);
+    if (req.query.sort) {
+        console.log(`Specific query 'sort':`, req.query.sort);
+    }
+    res.end();
+});
+```
+
+Will allow us to query on top of the path!
+
+So sending this: `http://localhost:3000/monkey/messages?sort=likes&direction=ascending`
+results in this response:
+
+```
+Hello monkey!
+All queries: { sort: 'likes', direction: 'ascending' }
+Specific query 'sort': likes
+```
+
+Amazing!

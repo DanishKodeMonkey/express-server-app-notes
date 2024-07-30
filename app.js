@@ -22,7 +22,12 @@ app.post('/messages', (req, res) =>
 // Route parameter path:
 app.get('/:username/messages', (req, res) => {
     // log the request parameter to console
-    console.log(`Hello ${req.params}!`);
+    console.log(`Hello ${req.params.username}!`);
+    // PART 2.4 - query parameters
+    console.log(`All queries:`, req.query);
+    if (req.query.sort) {
+        console.log(`Specific query 'sort':`, req.query.sort);
+    }
     // end the response.
     res.end();
 });
