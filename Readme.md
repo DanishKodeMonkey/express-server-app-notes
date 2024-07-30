@@ -369,3 +369,11 @@ Any other routes will pass through the index router `/`
     So all routes in our routers implicitly start with their specified parent path.
 
     E.g `messages/:messageId` to get a specific message id
+
+# Do you want to know more?
+
+If interested, have a look at [the express docs](https://expressjs.com/en/4x/api.html)
+
+or more specifically the [routing section](https://expressjs.com/en/guide/routing.html)
+
+If interested, have a look at [the odin project](https://www.theodinproject.com/lessons/nodejs-routes) that covers this in great detail!
