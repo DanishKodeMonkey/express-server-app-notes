@@ -508,6 +508,12 @@ Once done, the controller passes the processed data to the view, rendering the d
     A POST route should trigger a createSomething middleware,
     ETC. This convention is typically based on the person however.
 
+# Part 4.6 - Creating a controller!
+
+Finally, lets actually MAKE a controller
+
+Like with our routers, we will organize our controllers neatly inside their own `/controllers` folder
+
 # Do you want to know more?
 
 If interested, have a look at [the express docs](https://expressjs.com/en/4x/api.html)
