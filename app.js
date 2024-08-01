@@ -58,6 +58,18 @@ app.get('/:username/messages/:messageId', (req, res) => {
  */
 
 // Set up the server to listen to a specified port, in this case PORT = 3000
+
+// Final application level middleware for error handling
+// Notice the forth argument, err.
+// This is required for express to recognise this middleware as a error handler.
+app.use((err, req, res, next) => {
+    // pass error object to console for developer, and respond to client with a 500 errror.
+    console.error(err);
+    res.status(500).send(err);
+
+    // more fine grained control of error handling, like for specific error codes, 404, 501 etc.
+    // Could also be handled here, in order, before the catch all 500 error would pass it as a generic error.
+});
 const PORT = 3000;
 app.listen(PORT, () =>
     console.log(`My first express app - listening on port ${PORT}!`)
