@@ -565,6 +565,52 @@ GET -> `get(route)(description)` -> `getUserDetails`
 POST -> `create(route)(description)` -> `postMessage`
 DELETE -> `delete(route)(description)` -> `deletePostByDate`
 
+## Part 4.6.3 - Error handling, try/catch
+
+Building robust applications requires graceful error handling throughout the applicaiton.
+
+Implementing proper error handling early will provide meaningful error responses to the client and prevent the application from crashing unexpectedly, which is the last thing we would want to happen.
+
+The approach to handling errors exists in numerous ways, one of which is using javascripts built in try/catch statements.
+
+Lets implement some error handling in our `getUserById` controller function
+
+```javascript
+const getUserById = async (req, res) => {
+    const userId = req.params.id;
+
+    // Start try/catch block
+    try {
+        const user = await exampleDBQueryToGetUser(userId);
+        if (!user) {
+            res.status(404).send('User not found');
+            return;
+        }
+
+        res.status(200).send(`User found: ${user.name}`);
+        // Catch errors from try block (if any) and assign to error object.
+    } catch (error) {
+        // Print to console for developer
+        console.error('Error retrieving user:', error);
+        // Gracefully respond with error to end-user.
+        res.status(500).send('Internal Server Error');
+    }
+};
+```
+
+This will gracefully handle the error without crashing the entire program.
+
+    Alternatively, call the next(error) function and pass the response error to the next middleware.
+    This could be a error handling middleware at the end of the chain.
+    If no middleware is provided, express will render a error page in HTML using express default view.
+    Which is not very pretty for the user.
+
+This is a fully functional way to handle errors in our functions.
+
+However, eventually we will run into an issue, as we would have to add the same try/catch block to ALL controllers.
+
+## Part 4.6.4 - Error handling, express-async-handler
+
 # Do you want to know more?
 
 If interested, have a look at [the express docs](https://expressjs.com/en/4x/api.html)
