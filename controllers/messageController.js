@@ -1,6 +1,8 @@
-// Messages controller
+const asyncHandler = require('express-async-handler');
 
-const getMessageById = async (req, res) => {
+// Messages controller, with a asynchandler error handler.
+
+const getMessageById = asyncHandler(async (req, res) => {
     // Extract Message id from request parameters
     const MessageId = req.params.id;
 
@@ -19,4 +21,4 @@ const getMessageById = async (req, res) => {
     // if Message is found, the Message object will be true, return the Message.name
     // this response will be sent alongside a status code 200 *OK*
     res.status(200).send(`Message found: ${Message.name}`);
-};
+});
