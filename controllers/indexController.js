@@ -1,5 +1,3 @@
-import 
-
 // users controller
 
 const viewIndexGreeting = async (req, res) => {
