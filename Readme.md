@@ -512,7 +512,58 @@ Once done, the controller passes the processed data to the view, rendering the d
 
 Finally, lets actually MAKE a controller
 
+## Part 4.6.1 - Organising the controllers
+
 Like with our routers, we will organize our controllers neatly inside their own `/controllers` folder
+
+Inside the folder, have a controller file for each respective router, e.g
+
+`usersRouter -> usersController`
+
+`messagesRouter -> messagesController`
+
+`indexRouter -> indexController`
+
+This approach will encourage separation of concerns and provide convenient access to relevant controller functions.
+
+Common naming convention suggest naming respective modules after their respective parent modules.
+This will make it easier to identify relations between files, and later for debugging.
+
+## Part 4.6.2 - Controller functions
+
+Making functions for our controllers is straight forward like any other function, just ensure that any function that includes any kind of interaction with a database is created in a proper asynchrous fashion using async/await.
+
+As an example, in usersController we have made a controller function for fetching a user ID
+
+```javascript
+// users controller
+
+const getUserById = async (req, res) => {
+    const userId = req.params.id;
+    const user = await exampleDBQueryToGetUser(userId);
+
+    if (!user) {
+        res.status(404).send('User not found');
+        return;
+    }
+
+    res.status(200).send(`User found: ${user.name}`);
+};
+```
+
+    See ./controllers/userController.js for line breakdown
+
+Here, we made a controller function that fetches a user object from our fictional database, based on the provided userId in the request parameters.
+
+As with the files, common naming conventions for the controller functions are usually based on the route they are attached to, the REST method they utilise, and a optional descriptor if needed,
+like parameters used in the function(like id),
+sorting methods(ascending),
+specific object parts (like details, or titles) etc..
+
+Like for our `getUserById` functions other examples would be
+GET -> `get(route)(description)` -> `getUserDetails`
+POST -> `create(route)(description)` -> `postMessage`
+DELETE -> `delete(route)(description)` -> `deletePostByDate`
 
 # Do you want to know more?
 
