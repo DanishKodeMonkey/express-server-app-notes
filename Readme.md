@@ -431,6 +431,10 @@ For example, a error handling middleware should always have four arguments.
 
 While any middleware with three, or less arguments will be considered a request middleware, regardless of its placement in the program.
 
+Furthermore, during a middleware next() call, the way you invoke it will also determine where control will be passed:
+
+-`next()` will generally pass control to the next middleware in the chain. -`next(new Error(object))` will pass control directly to a error middleware handler -`next('/route')` will pass control to the next route handler, with a matching path, if provided. This only works for app.method or router.method type methods. -`next('router')` skips all middleware functions attached to the specified router instance, and pass control back out of the router instance. In short, it will exit the router and return to the parent router, all the way to app.
+
 The purposes and use cases of a middleware function can be vast. Some of which can include
 
 -   Modifying a request or response object
@@ -678,6 +682,8 @@ app.use((err, req, res, next) => {
 
 Note that the error handling middleware has a forth argument, err.
 The forth argument is a requirement for express to recognise the function as an error handling middleware.
+
+Now, whenever we pass `next(error)` with an error object, it will automatically pass control directly to the error middleware function.
 
 With this, we will handle all errors with a generic 500 error code.
 But we should probably handle more specific cases as they crop up before that.
