@@ -12,10 +12,8 @@ const getMessageById = asyncHandler(async (req, res) => {
 
     // Error state, if a Message is not found, the Message object will not be true.
     if (!Message) {
-        // respond with a 404 status code, and a message body saying Message not found
-        res.status(404).send('Message not found');
-        // end the function
-        return;
+        // throw our custom error, and it will be passed to our error handler in app
+        throw new CustomNotFoundError('User not found');
     }
 
     // if Message is found, the Message object will be true, return the Message.name

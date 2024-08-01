@@ -665,6 +665,8 @@ This means that we will need to create a error handling middleware to actually p
 
 We can create a single error handling middleware function at bottom-most level of our application, which will ensure that it is actually the last middleware function to execute, and only handle errors that has been passed down from the other middleware functions before it.
 
+## part 4.6.5 - Error handling, custom middleware.
+
 ```javascript
 app.use((err, req, res, next) => {
     console.error(err);
@@ -677,10 +679,71 @@ app.use((err, req, res, next) => {
 Note that the error handling middleware has a forth argument, err.
 The forth argument is a requirement for express to recognise the function as an error handling middleware.
 
+With this, we will handle all errors with a generic 500 error code.
+But we should probably handle more specific cases as they crop up before that.
+What if a page is not found (404)?
+
+## 4.6.6 - Error handling, Custom error class extension
+
+We can do this by creating an extension of the `Error` class.
+The `Error` class is built-in to javascript, but we can extend it to add custom error types
+for our program to throw.
+
+```javascript
+// custom error, extending existing Error object.
+class CustomNotFoundError extends Error {
+    constructor(message) {
+        super(message);
+        this.statusCode = 404;
+        this.name = 'NotFoundError';
+    }
+}
+```
+
+So we extend the built-in `Error` class, with our own CustomNotFoundError, and inherit its properties.
+We then add our own property, statusCode, and rename the name property to be more appropriately descriptive.
+
+This could effectively be done for every single HTTP status code.
+
+Now we just have to implement it in our controller function!
+
+```javascript
+const asyncHandler = require('express-async-handler');
+
+
+
+const getMessageById = asyncHandler(async (req, res) => {
+
+    {...}
+
+    if (!Message) {
+        // throw our custom error, and it will be passed to our error handler in app
+        throw new CustomNotFoundError('User not found');
+    }
+
+    {...}
+
+});
+```
+
+And have our error handler middleware in app handle it from there
+
+```javascript
+app.use((err, req, res, next) => {
+    console.error(err);
+    // use our custom error class, or default to 500
+    res.status(err.statusCode || 500).send(err.message);
+});
+```
+
+This pattern is particularly useful to adopt in any project, and can be expanded upon to handle different use cases (and http codes)
+
 # Do you want to know more?
 
 If interested, have a look at [the express docs](https://expressjs.com/en/4x/api.html)
 
 or more specifically the [routing section](https://expressjs.com/en/guide/routing.html)
+
+For more about [custom error handlers](https://javascript.info/custom-errors)
 
 If interested, have a look at [the odin project](https://www.theodinproject.com/lessons/nodejs-routes) that covers this in great detail!
