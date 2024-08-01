@@ -421,7 +421,15 @@ Middleware functions typically take three arguments
 
 -   `next` is a special function that pass control of the request to the next middleware function in the chain. This function is optional.
 
+-   `err` is a special forth argument, that is required for express to recognise the middleware as a error handler, more on this later.
+
 **The names are just convention, and can be named anything you want.**
+
+The number of arguments in a middleware function determines the role of the middleware, and allows express to distinguish between their roles.
+
+For example, a error handling middleware should always have four arguments.
+
+While any middleware with three, or less arguments will be considered a request middleware, regardless of its placement in the program.
 
 The purposes and use cases of a middleware function can be vast. Some of which can include
 
@@ -611,6 +619,64 @@ However, eventually we will run into an issue, as we would have to add the same 
 
 ## Part 4.6.4 - Error handling, express-async-handler
 
+Alternatively to manually implementing and handling all our errors, we could turn to a useful npm package called `express-async-handler`
+
+Remember, to install packages to our project, we use `npm install (package name)`
+
+So lets install express-async handler.
+
+```bash
+npm install express-async-handler
+```
+
+And import it anywhere you need it, namely anywhere you are going to create asynchronous functions.
+So at the top level of our controllers.
+
+```javascript
+const asyncHandler = require('Express-async-handler');
+```
+
+Now, when creating our functions, we wrap our entire function inside the `asynchandler`, and let it handle errors instead of our `try/catch` blocks.
+
+Lets do this for our messagesController.js file.
+
+```javascript
+const asyncHandler = require('express-async-handler');
+
+// wrap the async function in the asyncHandler here
+const getMessageById = asyncHandler(async (req, res) => {
+    const MessageId = req.params.id;
+
+    const Message = await exampleDBQueryToGetMessage(MessageId);
+
+    if (!Message) {
+        res.status(404).send('Message not found');
+        return;
+    }
+    res.status(200).send(`Message found: ${Message.name}`);
+    // Remember to end the wrap here.
+});
+```
+
+Now, any error thrown in the function will automatically be caught,
+and passed to the 'next' function.
+
+This means that we will need to create a error handling middleware to actually pass errors TO.
+
+We can create a single error handling middleware function at bottom-most level of our application, which will ensure that it is actually the last middleware function to execute, and only handle errors that has been passed down from the other middleware functions before it.
+
+```javascript
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).send(err);
+});
+```
+
+    see app.js bottom for line breakdown
+
+Note that the error handling middleware has a forth argument, err.
+The forth argument is a requirement for express to recognise the function as an error handling middleware.
+
 # Do you want to know more?
 
 If interested, have a look at [the express docs](https://expressjs.com/en/4x/api.html)
@@ -618,11 +684,3 @@ If interested, have a look at [the express docs](https://expressjs.com/en/4x/api
 or more specifically the [routing section](https://expressjs.com/en/guide/routing.html)
 
 If interested, have a look at [the odin project](https://www.theodinproject.com/lessons/nodejs-routes) that covers this in great detail!
-
-```
-
-```
-
-```
-
-```
