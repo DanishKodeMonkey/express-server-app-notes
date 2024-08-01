@@ -1,4 +1,4 @@
-// users controller
+// users controller, with a try/catch error handler.
 
 const getUserById = async (req, res) => {
     // Extract user id from request parameters
