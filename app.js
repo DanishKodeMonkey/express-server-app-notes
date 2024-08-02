@@ -1,7 +1,7 @@
 /* The app.js file
 
 App.js will server as the starting point for the Express server. 
-The file can be named anyhting we want, such as index.js, or main.js.
+The file can be named anything we want, such as index.js, or main.js.
 For the purposes of this project, we will simply go with app.js, 
 as stated in the Express docs
 
@@ -13,13 +13,26 @@ const express = require('express');
 // Initialize the app variable using Express, this will be our server.
 const app = express();
 
+// Common middleware built-in to express
+// urlencoded parses form payloads and assigns it to req.body
+app.use(express.urlencoded({ extended: false }));
+
+// Example format of a custom application level middleware,
+// just remember to call next at the end
+app.use((req, res, next) => {
+    // Some custom code here, could be authentication, could be logging, or something entirely different
+
+    // REmember, call next to proceed to the next middleware in the chain
+    next();
+});
+
 // Part 3 - Routers
 // import routers
 const messagesRouter = require('./routes/messagesRouter');
 const usersRouter = require('./routes/usersRouter');
 const indexRouter = require('./routes/indexRouter');
 
-// Assign paths to routers
+// Assign base paths to respective router modules.
 app.use('/messages', messagesRouter);
 app.use('/users', usersRouter);
 app.use('/', indexRouter);
