@@ -2,19 +2,30 @@
 
 This project serves as the notes and breakdown of starting up a basic Express server, it is by no means exhaustive, but provides a excellent starting point to expand upon.
 
-Starting in a new folder, initiate the node enviroment and generate a package.json using
+Express is a minimal and flexible Node.js web application framework that provides a robust set of features to develop web and mobile applications. It facilitates the rapid development of Node-based web applications by providing a set of features to handle HTTP requests and responses, middlewares, routing, and much more.
 
 # Part 1. The app
 
+First, ensure that Node.js and npm (Node Package Manager) are installed on your system. You can check this by running:
+
+```bash
+node -v
+npm -v
+```
+
+If these commands return a version number, you have Node.js and npm installed. If not, you can download and install them from the [official Node.js website.](https://nodejs.org/en)
+
 ## Part 1.1 Environment setup
+
+To initialize a new node.js project, run:
 
 ```Bash
 npm init -y
 ```
 
-node package manager will now initiate a new enviroment, and use yes for all questions using the yes flag =y.
+This command creates a package.json file with default settings. The package.json file is essential for managing your project's dependencies and scripts. It contains metadata about your project and is used by npm to handle the project’s dependencies and scripts.
 
-Now, install express
+Now, lets install express
 
 ```Bash
 npm install Express
@@ -40,15 +51,15 @@ git init -b main
 
 This will establish a git envriroment and set the working branch to main.
 
-Before anything else, make sure to also create the .gitignore file.
+Before anything else, make sure to also create a .gitignore file to specify which files and directories Git should ignore.
 
 ```bash
 touch .gitignore
 ```
 
-In this file, add node_modules/ on the first line.
+In this file, add `node_modules/` on the first line.
 Anything else we would not want to publish to the entirety of the internet,
-like secrets, credentials, etc. Should all be added here for reference.
+like secrets, credentials, etc. Should all be added here.
 
 Start by commiting the .gitignore file
 
@@ -58,11 +69,16 @@ git commit -m 'initial commit'
 ```
 
 Use the same approach to add our other files, package-lock and package.json to the git staging.
-As the project proceeds, remember to commit early and often, and use `git status` as needed to find any changes, as well as `git diff 'file path'` to review the changes if needed.
+
+Remember to commit early and often.
+Use `git status` as needed to find any changes,
+as well as `git diff 'file path'` to review the changes before committing them..
 
 ## Part 1.3 The app.js file
 
-App.js will server as the starting point for the Express server.
+Create a new file called `app.js` in the root directory.
+
+App.js will serve as the starting point for the Express server.
 The file can be named anyhting we want, such as index.js, or main.js.
 For the purposes of this project, we will simply go with app.js,
 as stated in the Express docs
@@ -80,7 +96,11 @@ app.listen(PORT, () =>
 );
 ```
 
-### **See app.js for a breakdown of each line.**
+-   const express = require('express');: Imports the Express module.
+-   const app = express();: Creates an instance of an Express application.
+-   app.get('/', (req, res) => res.send('Hello, world!'));: Defines a route for the root URL that responds with 'Hello, world!'.
+-   const PORT = 3000;: Sets the port number for the server.
+-   app.listen(PORT, () => {...});: Starts the server and listens on the specified port, logging a message when the server is running.
 
 ## Part 1.4 The request's journey
 
@@ -125,6 +145,12 @@ Since there is no more code to run, the function returns. And since Express has 
 The browser now receives the server's response, and displays it on screen. "Hello, world!" should now appear.
 
 This could have been anything we would have wanted to defined, a math equation, a story, even a file.
+
+Here's a visual representation of the process :
+
+```plaintext
+[Client] -> [Request] -> [Express Server] -> [Middleware] -> [Route Handler] -> [Response] -> [Client]
+```
 
 ## Part 1.5 Developing the app
 
@@ -760,6 +786,13 @@ With this we have created a very basic boilerplate express server, we have intro
 Keep in mind this is just the start, numerous common tasks and practises can still be introduced, like authentication, logging, data handling and more.
 
 This should however give a good starting point to expand upon for most projects.
+
+## Whats next?
+
+Further venues of exploration after this could be
+**Database integration** How can we integrate databases like MongoDB and postgreSQL with express?
+**Authentication and authorization** How can we secure our application for authorized users using libraries like passport.js or JWT?
+**Advanced error handling** How can we expand on our error handling techniques as the application scales?
 
 # Do you want to know more?
 
