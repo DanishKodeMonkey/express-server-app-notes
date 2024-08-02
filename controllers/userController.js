@@ -35,3 +35,6 @@ const getUserById = async (req, res) => {
     */
     }
 };
+
+// export the new controller functions to be called in the routers
+module.exports = { getUserById };

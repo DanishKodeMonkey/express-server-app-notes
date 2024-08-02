@@ -20,3 +20,5 @@ const getMessageById = asyncHandler(async (req, res) => {
     // this response will be sent alongside a status code 200 *OK*
     res.status(200).send(`Message found: ${Message.name}`);
 });
+
+module.exports = { getMessageById };
