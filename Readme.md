@@ -1,10 +1,12 @@
 # Express Server setup basics
 
+This project serves as the notes and breakdown of starting up a basic Express server, it is by no means exhaustive, but provides a excellent starting point to expand upon.
+
 Starting in a new folder, initiate the node enviroment and generate a package.json using
 
 # Part 1. The app
 
-## Environment setup
+## Part 1.1 Environment setup
 
 ```Bash
 npm init -y
@@ -26,7 +28,7 @@ Now to create a basic express server. Start by creating a new file, app.js in th
 touch app.js
 ```
 
-### Optional, initiate GIT
+### Part 1.2 Optional, initiate GIT
 
 If you want to push this project to the repository eventually, setting up git in the enviroment is needed.
 
@@ -58,7 +60,7 @@ git commit -m 'initial commit'
 Use the same approach to add our other files, package-lock and package.json to the git staging.
 As the project proceeds, remember to commit early and often, and use `git status` as needed to find any changes, as well as `git diff 'file path'` to review the changes if needed.
 
-## The app.js file
+## Part 1.3 The app.js file
 
 App.js will server as the starting point for the Express server.
 The file can be named anyhting we want, such as index.js, or main.js.
@@ -80,7 +82,7 @@ app.listen(PORT, () =>
 
 ### **See app.js for a breakdown of each line.**
 
-## The request's journey
+## Part 1.4 The request's journey
 
 With the server up and running on port 3000, we will be able to send a request to the route specified!
 
@@ -124,7 +126,7 @@ The browser now receives the server's response, and displays it on screen. "Hell
 
 This could have been anything we would have wanted to defined, a math equation, a story, even a file.
 
-## Developing the app
+## Part 1.5 Developing the app
 
 During development, various changes will be made. In order for most changes to manifest, we must restart the app.
 
@@ -577,6 +579,13 @@ GET -> `get(route)(description)` -> `getUserDetails`
 POST -> `create(route)(description)` -> `postMessage`
 DELETE -> `delete(route)(description)` -> `deletePostByDate`
 
+To use our newly created `getUserById` function,
+we export it in the controller with `module.exports = {getUserById}`
+Import it to the top of our router with `const userController = require('path-to-controller')`
+and then call the controller functions on their respecting route paths.
+e.g. `router.get('/:id', userController.getUserById)`
+Now, whenever we handle a request on users/:id, it is passed through this route and it's corresponding controller function.
+
 ## Part 4.6.3 - Error handling, try/catch
 
 Building robust applications requires graceful error handling throughout the applicaiton.
@@ -743,6 +752,14 @@ app.use((err, req, res, next) => {
 ```
 
 This pattern is particularly useful to adopt in any project, and can be expanded upon to handle different use cases (and http codes)
+
+# Conclusion - The power of express
+
+With this we have created a very basic boilerplate express server, we have introduced an application layer, router layers, and controllers with different roles and tasks.
+
+Keep in mind this is just the start, numerous common tasks and practises can still be introduced, like authentication, logging, data handling and more.
+
+This should however give a good starting point to expand upon for most projects.
 
 # Do you want to know more?
 
