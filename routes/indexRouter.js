@@ -1,3 +1,6 @@
+// import controller functions to use here
+const indexController = require('../controllers/indexController');
+
 // Import Router module of express
 const { Router } = require('express');
 
@@ -6,8 +9,8 @@ const indexRouter = Router();
 
 // Establish paths using the newly established router
 
-// Route to greet user
-indexRouter.get('/', (req, res) => res.send('Hello world!'));
+// Route to greet user, call index controller function
+indexRouter.get('/', indexController.viewIndexGreeting);
 
 // Finally, export the Router module we have made
 module.exports = indexRouter;

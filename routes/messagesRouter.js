@@ -1,3 +1,6 @@
+// import controller
+const messageController = require('../controllers/messageController');
+
 // Import Router module of express
 const { Router } = require('express');
 
@@ -6,14 +9,11 @@ const messagesRouter = Router();
 
 // Establish paths using the newly established router
 
-// Route to get all messages (middleware would usually handle fetching all messages from a database)
+// Route to get all messages in-line (middleware would usually handle fetching all messages from a database)
 messagesRouter.get('/', (req, res) => res.send(`All messages`));
 
-// Route to get specific message (handling could include searching database for messageId and return data)
-messagesRouter.get('/:messageId', (req, res) => {
-    const { messageId } = req.params;
-    res.send(`Message ID: ${messageId}`);
-});
+// Route to get specific message using controller
+messagesRouter.get('/:messageId', messageController.getMessageById);
 
 // Finally, export the Router module we have made
 module.exports = messagesRouter;

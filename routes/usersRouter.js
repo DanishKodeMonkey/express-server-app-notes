@@ -1,3 +1,5 @@
+const userController = require('../controllers/userController');
+
 // Import Router module of express
 const { Router } = require('express');
 
@@ -6,14 +8,11 @@ const usersRouter = Router();
 
 // Establish paths using the newly established router
 
-// Route to get all users (would usually handle fetching user data from a database)
+// Route to get all users in-line (would usually handle fetching user data from a database)
 usersRouter.get('/', (req, res) => res.send(`All users`));
 
-// Route to get specific user (handling could include searching database for userID and return data)
-usersRouter.get('/:username', (req, res) => {
-    const { userId } = req.params;
-    res.send(`User ID: ${userId}`);
-});
+// Route to get specific user using controller.
+usersRouter.get('/:username', userController.getUserById);
 
 // Finally, export the Router module we have made
 module.exports = usersRouter;
